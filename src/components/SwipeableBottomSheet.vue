@@ -3,7 +3,7 @@
     ref="wrapper"
     class="wrapper"
     :data-state="isMove ? 'move' : state"
-    :style="{ top: `${calcY(y)}px` }"
+    :style="{ top: `${isMove ? y : calcY()}px` }"
   >
     <div class="pan-area" ref="pan"><div class="bar" ref="bar"></div></div>
 
@@ -30,12 +30,11 @@ export default {
   mounted () {
     this.rect = this.$refs.wrapper.getBoundingClientRect()
 
-    this.y = this.rect.height - 120
+    this.y = this.rect.height * 0.8
 
 
     this.mc = new Hammer(this.$refs.pan)
     this.mc.get('pan').set({ direction: Hammer.DIRECTION_ALL })
-
 
     this.mc.on("panup pandown", (evt) => {
       this.y = evt.center.y - 16
@@ -76,14 +75,18 @@ export default {
           return this.rect.height * 0.13
         case "half":
           return this.rect.height * 0.8
+        default:
+          return this.y
       }
-      return this.y
+    },
+    setState (state) {
+      this.state = state
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 .wrapper {
   width: 100%;
   height: 100vh;
@@ -93,12 +96,7 @@ export default {
   left: 0;
 }
 
-
-.wrapper[data-state="half"], .wrapper[data-state="open"] {
-  transition: top .3s ease-out;
-}
-
-.wrapper[data-state="close"] {
+.wrapper[data-state="half"], .wrapper[data-state="open"], .wrapper[data-state="close"] {
   transition: top .3s ease-out;
 }
 
