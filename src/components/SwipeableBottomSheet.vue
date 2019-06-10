@@ -1,7 +1,14 @@
 <template>
-  <div :data-state="state" class="wrapper" ref="wrapper" :style="{ top: `${y}px`, left: `${x}px` }">
-    <div class="card">
-      <div class="bar" ref="bar"></div>
+  <div
+    ref="wrapper"
+    class="wrapper"
+    :data-state="isMove ? 'move' : state"
+    :style="{ top: `${calcY(y)}px` }"
+  >
+    <div class="pan-area" ref="pan"><div class="bar" ref="bar"></div></div>
+
+    <div>
+      <h1> Contents </h1>
     </div>
   </div>
 </template>
@@ -13,38 +20,65 @@ export default {
   data() {
     return {
       mc: null,
-      x: 0,
       y: 0,
       startY: 0,
-      state: "half"
+      isMove: false,
+      state: "half",
+      rect: {}
     }
   },
   mounted () {
-    const rect = this.$refs.wrapper.getBoundingClientRect()
-    this.y = rect.height - 120
-    this.mc = new Hammer(this.$refs.bar)
+    this.rect = this.$refs.wrapper.getBoundingClientRect()
+
+    this.y = this.rect.height - 120
+
+
+    this.mc = new Hammer(this.$refs.pan)
     this.mc.get('pan').set({ direction: Hammer.DIRECTION_ALL })
+
+
     this.mc.on("panup pandown", (evt) => {
-      this.y = evt.center.y
+      this.y = evt.center.y - 16
     })
 
     this.mc.on("panstart", (evt) => {
-      console.log(evt)
       this.startY = evt.center.y
-      this.state = "move"
+      this.isMove = true
     })
 
     this.mc.on("panend", (evt) => {
-      console.log(this.startY - evt.center.y)
-      if (this.startY - evt.center.y > 120) {
-        this.state = "open"
-      }
+      this.isMove = false
 
-      if (this.startY - evt.center.y < -120) {
-        this.state = "half"
-      }
+      switch (this.state) {
+        case "half":
+          if (this.startY - evt.center.y > 120) {
+            this.state = "open"
+          }
 
+          if (this.startY - evt.center.y < -50) {
+            this.state = "close"
+          }
+          break;
+        case "open":
+          if (this.startY - evt.center.y < -120) {
+            this.state = "half"
+          }
+          break;
+      }
     })
+  },
+  methods: {
+    calcY () {
+      switch (this.state) {
+        case "close":
+          return this.rect.height
+        case "open":
+          return this.rect.height * 0.13
+        case "half":
+          return this.rect.height * 0.8
+      }
+      return this.y
+    }
   }
 }
 </script>
@@ -54,24 +88,25 @@ export default {
   width: 100%;
   height: 100vh;
   border: 3px solid black;
-  position: absolute;
+  position: fixed;
+  background: white;
+  left: 0;
 }
 
-.wrapper[data-state="open"] {
-  top: 30px !important;
+
+.wrapper[data-state="half"], .wrapper[data-state="open"] {
   transition: top .3s ease-out;
 }
 
-.wrapper[data-state="half"] {
-  top: 652px !important;
+.wrapper[data-state="close"] {
   transition: top .3s ease-out;
 }
 
 .bar {
   width: 45px;
-  height: 20px;
+  height: 12px;
   border-radius: 14px;
-  background: black;
+  background: rgba(0, 0, 0, .3);
   margin: 14px auto;
   cursor: pointer;
 }
