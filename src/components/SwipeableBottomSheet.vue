@@ -1,16 +1,18 @@
 <template>
+<div class="wrapper" :data-open="state === 'open' ? 1 : 0">
+  <div class="bg" @click="() => setState('half')"></div>
   <div
-    ref="wrapper"
-    class="wrapper"
+    ref="card"
+    class="card"
     :data-state="isMove ? 'move' : state"
     :style="{ top: `${isMove ? y : calcY()}px` }"
   >
     <div class="pan-area" ref="pan"><div class="bar" ref="bar"></div></div>
-
-    <div>
-      <h1> Contents </h1>
+    <div class="contents">
+      <slot></slot>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -28,7 +30,7 @@ export default {
     }
   },
   mounted () {
-    this.rect = this.$refs.wrapper.getBoundingClientRect()
+    this.rect = this.$refs.card.getBoundingClientRect()
 
     this.y = this.rect.height * 0.8
 
@@ -87,25 +89,51 @@ export default {
 </script>
 
 <style scoped>
-.wrapper {
-  width: 100%;
-  height: 100vh;
-  border: 3px solid black;
+.wrapper[data-open="1"] {
   position: fixed;
-  background: white;
+  top: 0;
   left: 0;
 }
 
-.wrapper[data-state="half"], .wrapper[data-state="open"], .wrapper[data-state="close"] {
+.wrapper[data-open="1"] .bg {
+  display: block;
+  transition: all .3s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .3);
+}
+
+.card {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  background: white;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 -3px 4px rgba(0, 0, 0, .1);
+  left: 0;
+}
+
+.card[data-state="half"], .card[data-state="open"], .card[data-state="close"] {
   transition: top .3s ease-out;
+}
+
+.card[data-state="close"] {
+  box-shadow: none;
 }
 
 .bar {
   width: 45px;
-  height: 12px;
+  height: 8px;
   border-radius: 14px;
   background: rgba(0, 0, 0, .3);
-  margin: 14px auto;
+  margin: 0 auto;
   cursor: pointer;
+}
+
+.pan-area {
+  padding: 12px 0;
 }
 </style>
