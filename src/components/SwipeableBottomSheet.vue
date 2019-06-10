@@ -88,7 +88,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .wrapper[data-open="1"] {
   position: fixed;
   top: 0;
@@ -135,5 +135,12 @@ export default {
 
 .pan-area {
   padding: 12px 0;
+}
+
+.contents {
+  overflow-y: scroll;
+  max-height: 100%;
+  padding-bottom: calc(100vh * 0.2);
+  box-sizing: border-box;
 }
 </style>

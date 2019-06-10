@@ -21,6 +21,12 @@ module.exports = {
       },
       { test: /\.js$/,
         loader: 'babel-loader'
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          "postcss-loader"
+        ]
       }
     ]
   },
