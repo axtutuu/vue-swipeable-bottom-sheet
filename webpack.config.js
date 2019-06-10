@@ -1,5 +1,4 @@
 const { resolve } = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
   mode: 'production',
@@ -7,7 +6,7 @@ module.exports = {
   output: {
     library: 'SwipeableBottomSheet',
     libraryTarget: 'commonjs2',
-    filename: 'vue-swipeable-bottom-sheet',
+    filename: 'vue-swipeable-bottom-sheet.js',
     path: resolve('dist'),
   },
   module: {
@@ -15,9 +14,6 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: {
-          extractCSS: true
-        }
       },
       { test: /\.js$/,
         loader: 'babel-loader'
@@ -29,8 +25,5 @@ module.exports = {
         ]
       }
     ]
-  },
-  plugins: [
-    new ExtractTextPlugin('vue-swipeable-bottom-sheet.css')
-  ]
+  }
 };
