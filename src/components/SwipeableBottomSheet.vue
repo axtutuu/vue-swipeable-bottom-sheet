@@ -30,12 +30,15 @@ export default {
     }
   },
   mounted () {
+    let lastTime = 0
+    const delay = 500
+    window.onresize = () => {
+      this.rect = this.$refs.card.getBoundingClientRect()
+    }
     this.rect = this.$refs.card.getBoundingClientRect()
 
-    this.y = this.rect.height * 0.8
-
-
     this.mc = new Hammer(this.$refs.pan)
+    this.y = this.rect.height * 0.8
     this.mc.get('pan').set({ direction: Hammer.DIRECTION_ALL })
 
     this.mc.on("panup pandown", (evt) => {
@@ -67,6 +70,10 @@ export default {
           break;
       }
     })
+  },
+  beforeDestroy () {
+    this.mc.destroy()
+    window.onresize = null
   },
   methods: {
     calcY () {
