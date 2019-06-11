@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Example</h1>
+    <h1>Vue Swipeable Bottom Sheet</h1>
     <button @click="open">Open</button>
     <button @click="half">Half</button>
     <button @click="close">Close</button>

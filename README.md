@@ -5,7 +5,7 @@
 
 A swipeable material's bottom sheet implementation, that uses [hammerjs](https://github.com/hammerjs/hammer.js).
 
-[Demo](https://atsutopia.github.io/vue-swipeable-bottom-sheet/dist)
+![vue-swipeable-bottom-sheet.gif](vue-swipeable-bottom-sheet.gif)
 
 ## Installation
 
