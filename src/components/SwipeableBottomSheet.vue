@@ -30,8 +30,6 @@ export default {
     }
   },
   mounted () {
-    let lastTime = 0
-    const delay = 500
     window.onresize = () => {
       this.rect = this.$refs.card.getBoundingClientRect()
     }
