@@ -30,6 +30,7 @@ export default {
     }
   },
   mounted () {
+    console.log("init")
     window.onresize = () => {
       this.rect = this.$refs.card.getBoundingClientRect()
     }

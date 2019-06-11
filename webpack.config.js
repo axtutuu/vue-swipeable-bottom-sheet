@@ -13,16 +13,14 @@ module.exports = {
     rules: [
       {
         test: /\.vue$/,
-        loader: 'vue-loader',
-        options: {
-          loaders: {
-            js: 'babel-loader',
-            scss: ['postcss-loader']
-          }
-        }
+        loader: 'vue-loader'
       },
       { test: /\.js$/,
         loader: 'babel-loader'
+      },
+      {
+        test: /\.scss$/,
+        loader: ['postcss-loader']
       }
     ]
   }
