@@ -19,25 +19,37 @@
 import Hammer from "hammerjs"
 
 export default {
+  props: {
+    openY: {
+      type: Number,
+      default: 0.1
+    },
+    halfY: {
+      type: Number,
+      default: 0.8
+    },
+    defaultState: {
+      type: String,
+      default: "close"
+    }
+  },
   data() {
     return {
       mc: null,
       y: 0,
       startY: 0,
       isMove: false,
-      state: "half",
+      state: this.defaultState,
       rect: {}
     }
   },
   mounted () {
-    console.log("init")
     window.onresize = () => {
       this.rect = this.$refs.card.getBoundingClientRect()
     }
     this.rect = this.$refs.card.getBoundingClientRect()
 
     this.mc = new Hammer(this.$refs.pan)
-    this.y = this.rect.height * 0.8
     this.mc.get('pan').set({ direction: Hammer.DIRECTION_ALL })
 
     this.mc.on("panup pandown", (evt) => {
@@ -80,9 +92,9 @@ export default {
         case "close":
           return this.rect.height
         case "open":
-          return this.rect.height * 0.13
+          return this.rect.height * this.openY
         case "half":
-          return this.rect.height * 0.8
+          return this.rect.height * this.halfY
         default:
           return this.y
       }
