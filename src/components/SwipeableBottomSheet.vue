@@ -7,7 +7,7 @@
     :data-state="isMove ? 'move' : state"
     :style="{ top: `${isMove ? y : calcY()}px` }"
   >
-    <div class="pan-area" ref="pan"><div class="bar" ref="bar"></div></div>
+    <div class="pan-area" ref="pan"><div class="bar" ref="bar" :style="{ backgroundColor: barColor }"></div></div>
     <div class="contents">
       <slot></slot>
     </div>
@@ -31,6 +31,10 @@ export default {
     defaultState: {
       type: String,
       default: "close"
+    },
+    barColor: { // Added a bar color props 
+      type: String,
+      default: "rgba(0, 0, 0, .3)"
     }
   },
   data() {
@@ -65,7 +69,20 @@ export default {
       this.isMove = false
 
       switch (this.state) {
+        case "close": //Added a close state on the condition to be able to swipe from closed to half/closed state. 
         case "half":
+          if (this.state == 'close') {
+            if (this.startY - evt.center.y > 120) {
+              this.state = "half"
+            } 
+
+            if (this.startY - evt.center.y > 320) {
+              this.state = 'open'
+            }
+
+            break;
+          }
+
           if (this.startY - evt.center.y > 120) {
             this.state = "open"
           }
@@ -146,13 +163,26 @@ export default {
   width: 45px;
   height: 8px;
   border-radius: 14px;
-  background: rgba(0, 0, 0, .3);
   margin: 0 auto;
   cursor: pointer;
 }
 
+// Moved the pan area above the card content to be ale to swipe from closed state to half/open
 .pan-area {
+  top: -28px;
+  right: 0; left: 0;
+  position: absolute;
   padding: 12px 0;
+
+  .bar {
+    &:hover {
+      cursor: grab;
+    }
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
 }
 
 .contents {
