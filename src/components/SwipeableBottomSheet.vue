@@ -105,6 +105,7 @@ export default {
   },
   methods: {
     calcY () {
+      console.log(this.openY, this.halfY)
       switch (this.state) {
         case "close":
           return this.rect.height
@@ -167,9 +168,8 @@ export default {
   cursor: pointer;
 }
 
-// Moved the pan area above the card content to be ale to swipe from closed state to half/open
 .pan-area {
-  top: -28px;
+  top: 0;
   right: 0; left: 0;
   position: absolute;
   padding: 12px 0;
@@ -183,6 +183,11 @@ export default {
       cursor: grabbing;
     }
   }
+}
+
+// Moved the pan area above the card content to be ale to swipe from closed state to half/open
+.card[data-state="close"] .pan-area {
+  top: -28px;
 }
 
 .contents {
